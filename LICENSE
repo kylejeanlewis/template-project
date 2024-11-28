@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 __author__
+Copyright (c) 2024 Chang Jie Leong
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
