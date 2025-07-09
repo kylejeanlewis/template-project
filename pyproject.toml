@@ -1,23 +1,100 @@
 [build-system]
-requires = ["setuptools>=54","wheel"]
+requires = ["setuptools>=54", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.pytest.ini_options]
-addopts = "--cov=slapping"
-testpaths = [
-    "tests",
+[project]
+name = "package"
+version = "2.0.0"
+description = "__description__"
+readme = "docs/README.md"
+authors = [
+    {name="Chang Jie Leong", email="changjie.leong@outlook.com"}
+]
+license = "MIT"
+keywords = [
+    "python"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    # "Intended Audience :: Developers",
+    # "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    # "Topic :: Scientific/Engineering"
+]
+requires-python = ">=3.10"
+dependencies = [
+    # Add your package dependencies here
 ]
 
-[tool.mypy]
-mypy_path = "src"
-check_untyped_defs = true
-disallow_any_generics = true
-ignore_missing_imports = true
-no_implicit_optional = true
-show_error_codes = true
-strict_equality = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_unreachable = true
-warn_unused_configs = true
-no_implicit_reexport = true
+[project.urls]
+Homepage = "https://kylejeanlewis.github.io/template-project/"
+GitHub = "https://github.com/kylejeanlewis/template-project"
+Documentation = "https://template-project.readthedocs.io/en/latest/"
+Changelog = "https://github.com/kylejeanlewis/template-project/blob/main/docs/CHANGELOG.md"
+Tracker = "https://github.com/kylejeanlewis/template-project/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=2.11",
+    "pytest-rerunfailures>=15.0",
+    "pytest-xdist>=3.6",
+    "tox>=3.24"
+]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.14",
+    "mkdocstrings-python>=1.16.12",
+    "ruff>=0.12.0"
+]
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.packages.find]
+include = ["package*", "docs*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json", "*.yaml", "*.png", "*.md", "*.rst"]
+
+
+[tool.pytest.ini_options]
+addopts = "-v"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+# markers = []
+
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+minversion = 3.10.0
+envlist = py310, py311, py312
+isolated_build = true
+
+[gh-actions]
+python =
+    3.10: py310
+    3.11: py311
+    3.12: py312
+
+[testenv]
+setenv =
+    PYTHONPATH = {toxinidir}
+deps =
+    -r {toxinidir}/dev/requirements.txt
+    -r {toxinidir}/dev/requirements_dev.txt
+commands =
+    pytest --cov=package -n auto --reruns 3 --reruns-delay 1 {posargs}
+"""
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore F401 (unused imports) in all __init__.py files
+"__init__.py" = ["F401"]
